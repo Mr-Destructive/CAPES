@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <ul>
+        {% for publication in publications %}
+        <li><a href="/get/{{publication.name}}">{{ publication.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

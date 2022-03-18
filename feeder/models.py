@@ -12,6 +12,7 @@ class Article(models.Model):
     def __str__(self) -> str:
         return f"{self.title}"
 
-class Rssfeed(models.Model):
-    link = models.URLField()
+class FeedLink(models.Model):
+    link = models.URLField(unique=True)
+    name = models.CharField(max_length=255, unique=True)
 

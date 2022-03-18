@@ -3,12 +3,17 @@ import feedparser
 from dateutil import parser
 
 from feeder.models import Article
+from feeder.models import FeedLink 
 
+'''
 feedlist = [ 
         "https://dev.to/feed/", 
         "https://www.techrepublic.com/rssfeeds/articles/", 
         "https://medium.com/feed/better-programming",
         "https://cdn.hackernoon.com/feed"]
+'''
+
+feedlist = FeedLink.objects.values_list('link', flat=True) 
 
 def save_new_article(feedlist):
 
@@ -28,25 +33,6 @@ def save_new_article(feedlist):
                 )
                 article.save()
 
-def geeksforgeeks():
-    _feed = feedparser.parse("https://www.cdn.geeksforgeeks.org/feed/")
-    save_new_article(_feed)
-
-def devto():
-    _feed = feedparser.parse("https://dev.to/feed/")
-    save_new_article(_feed)
-
-def tech_republic():
-    _feed = feedparser.parse("https://www.techrepublic.com/rssfeeds/articles/")
-    save_new_article(_feed)
-
-def medium():
-    _feed = feedparser.parse("https://medium.com/feed/better-programming")
-    save_new_article(_feed)
-
-def hackernoon():
-    _feed = feedparser.parse("https://cdn.hackernoon.com/feed")
-    save_new_article(_feed)
 
 class Command(BaseCommand):
     def handle(self, *args, **options):

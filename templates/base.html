@@ -5,6 +5,10 @@
     <title>Feed Aggregator</title>
 </head>
 <body>
+    <a href="{% url 'feedlist' %}"><button>Home</button></a>
+    <a href="{% url 'createfeedlink' %}"><button>Add Publication</button></a>
+    <a href="{% url 'publicationlist' %}"><button>Publication List</button></a>
+    <a href="{% url 'fetchfeed' %}"><button>Fetch Latest</button></a>
     {% block body %}
     {% endblock %}
 </body>
