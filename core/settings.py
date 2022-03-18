@@ -87,3 +87,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+try:
+    exec(open(os.path.join(
+        os.path.dirname(__file__), "local_settings.py")).read())
+except IOError:
+    pass
