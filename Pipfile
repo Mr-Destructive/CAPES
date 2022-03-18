@@ -8,6 +8,7 @@ feedparser = "*"
 django = "*"
 python-dotenv = "*"
 python-dateutil = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
