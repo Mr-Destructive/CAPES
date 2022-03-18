@@ -13,7 +13,7 @@ feedlist = [
         "https://cdn.hackernoon.com/feed"]
 '''
 
-feedlist = FeedLink.objects.values_list('link', flat=True) 
+feedlist = FeedLink.objects.values_list('rss_link', flat=True) 
 
 def save_new_article(feedlist):
 

@@ -9,6 +9,9 @@ django = "*"
 python-dotenv = "*"
 python-dateutil = "*"
 psycopg2 = "*"
+bs4 = "*"
+requests = "*"
+lxml = "*"
 
 [dev-packages]
 

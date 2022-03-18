@@ -14,5 +14,6 @@ class Article(models.Model):
 
 class FeedLink(models.Model):
     link = models.URLField(unique=True)
+    rss_link = models.URLField(unique=True)
     name = models.CharField(max_length=255, unique=True)
 
