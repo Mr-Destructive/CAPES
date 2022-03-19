@@ -2,17 +2,6 @@ ALLOWED_HOSTS = ['192.168.99.100','127.0.0.1',]
 SECRET_KEY="fd389fcc60bdf0670c2bf2ce9be721f8b57bdf2d52cc47c8"
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'capes',
-        'USER': 'postgres',
-        'PASSWORD': '@1234567',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-'''
-DATABASES = {
     "default": {
         "ENGINE": os.getenv("SQL_ENGINE", "django.db.backends.sqlite3"),
         "NAME": os.getenv("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
@@ -22,4 +11,3 @@ DATABASES = {
         "PORT": os.getenv("SQL_PORT", "5432"),
     }
 }
-'''

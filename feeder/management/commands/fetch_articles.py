@@ -13,10 +13,10 @@ feedlist = [
         "https://cdn.hackernoon.com/feed"]
 '''
 
-feedlist = FeedLink.objects.values_list('rss_link', flat=True) 
 
-def save_new_article(feedlist):
+def save_new_article():
 
+    feedlist = FeedLink.objects.values_list('rss_link', flat=True) 
     for feed in feedlist:
         feed = feedparser.parse(feed)
         article_title = feed.channel.title
@@ -36,4 +36,4 @@ def save_new_article(feedlist):
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        save_new_article(feedlist)
+        save_new_article()
