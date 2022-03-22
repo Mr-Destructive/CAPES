@@ -2,6 +2,10 @@ from bs4 import BeautifulSoup as bs4
 import requests
 import feedparser
 import urllib.parse
+import ssl
+
+if hasattr(ssl, '_create_unverified_context'):
+    ssl._create_default_https_context = ssl._create_unverified_context
 
 def findfeed(site):
     raw = requests.get(site).text

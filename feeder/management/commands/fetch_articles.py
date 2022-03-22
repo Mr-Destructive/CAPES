@@ -1,9 +1,13 @@
 from django.core.management.base import BaseCommand
-import feedparser
 from dateutil import parser
+import feedparser
+import ssl
 
 from feeder.models import Article
 from feeder.models import FeedLink 
+
+if hasattr(ssl, '_create_unverified_context'):
+    ssl._create_default_https_context = ssl._create_unverified_context
 
 '''
 feedlist = [ 

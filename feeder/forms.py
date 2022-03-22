@@ -6,4 +6,8 @@ class AddFeedForm(forms.ModelForm):
         model = FeedLink
         fields = ['link',]
 
+class UpdateFeedForm(forms.ModelForm):
+    class Meta:
+        model = FeedLink
+        fields = ['link', 'name', 'rss_link',]
 
