@@ -3,10 +3,9 @@ version: '3.9'
 services:
   web:
     build: .
-    command: bash -c "python manage.py migrate && 
-      python manage.py runserver 0.0.0.0:8000"
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - .:/code/
+      - .:/
     ports:
       - 8000:8000
     environment:
@@ -24,12 +23,15 @@ services:
 
   db:
     image: postgres:13
+    build: .
+    container_name: db
+    ports: 
+      - 5432
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=capes2
+      - POSTGRES_USER: postgres
+      - POSTGRES_PASSWORD: postgres
     networks:
       - djangonetwork
 

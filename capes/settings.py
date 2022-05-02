@@ -8,10 +8,7 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 DEBUG = True
-ALLOWED_HOSTS = [
-    "192.168.99.100",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = ["*"]
 
 
 INSTALLED_APPS = [
@@ -111,7 +108,7 @@ DATABASES = {
         ),
         "USER": os.getenv("POSTGRES_USER", "postgres"),
         "PASSWORD": os.getenv("POSTGRES_PASSWORD", "postgres"),
-        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
+        "HOST": os.getenv("POSTGRES_HOST", "db"),
         "PORT": "5432",
     }
 }

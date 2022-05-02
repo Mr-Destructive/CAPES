@@ -2,7 +2,7 @@ FROM python:3
 
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /code
+WORKDIR .
 
 COPY requirements.txt .
 
