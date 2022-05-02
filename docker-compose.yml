@@ -1,25 +1,40 @@
-version: '3.8'
+version: '3.9'
 
 services:
   web:
-    build: ./app
-    command: python manage.py runserver 0.0.0.0:8000
+    build: .
+    command: bash -c "python manage.py migrate && 
+      python manage.py runserver 0.0.0.0:8000"
     volumes:
-      - ./app/:/usr/src/app/
+      - .:/code/
     ports:
       - 8000:8000
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=capes2
     env_file:
       - ./.env
     depends_on:
       - db
+    links:
+      - db:db
+    networks:
+      - djangonetwork
+
   db:
-    image: postgres:13.0-alpine
+    image: postgres:13
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=capes
+      - POSTGRES_DB=capes2
+    networks:
+      - djangonetwork
 
+networks:
+  djangonetwork:
+    driver: bridge
 volumes:
   postgres_data:

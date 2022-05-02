@@ -1,19 +1,16 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
+
+class FeedLink(models.Model):
+    rss_link = models.URLField(unique=True)
 
 class Article(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=1024)
     description = models.TextField()
-    pub_date = models.DateTimeField()
-    link = models.URLField()
-    image = models.URLField()
-    publication_name= models.CharField(max_length=100)
-    puid = models.CharField(max_length=10000)
+    link = models.URLField(max_length=1024)
+    tags = ArrayField(models.CharField(max_length=128))
+    #tags = models.CharField(max_length=128)
 
     def __str__(self) -> str:
         return f"{self.title}"
-
-class FeedLink(models.Model):
-    link = models.URLField(unique=True)
-    rss_link = models.URLField(unique=True)
-    name = models.CharField(max_length=255, unique=True)
 

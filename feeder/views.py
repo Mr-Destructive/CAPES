@@ -1,76 +1,55 @@
 from django.views.generic import ListView, CreateView
-from feeder.models import Article, FeedLink
-from feeder.forms import AddFeedForm, UpdateFeedForm
+from django.shortcuts import render
 from django.core.management import call_command
-from .scraper import findfeed
-from django.http import HttpResponse, HttpResponseBadRequest
 import feedparser
+from django.forms.models import model_to_dict
+from .models import FeedLink, Article
+from .forms import AddFeedForm
+from io import StringIO
+import json
+import itertools
 
-from django.views.generic.edit import DeleteView, UpdateView
-    
-class FeedFetch(ListView):
-    model = Article
-    template_name = "fetch.html"
-    
-    def get_context_data(self, **kwargs):
-        call_command('fetch_articles')
-        context = super().get_context_data(**kwargs)
-        context["articles"] = Article.objects.filter().order_by("pub_date")[:15]
-        return context
 
-class FeedView(ListView):
-    model = Article
-    template_name = 'fetch.html'
+def get_list(searchterm):
+    context = {}
+    context["articles"] = []
+    articles_list = Article.objects.values()
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["articles"] = Article.objects.filter().order_by("pub_date")[:15]
-        return context
+    for article in articles_list:
+        if (
+            searchterm in article["title"].lower()
+            or searchterm in article["description"].lower()
+        ):
+            context["articles"].append(article)
+        for tag in article["tags"]:
+            if searchterm in tag:
+                context["articles"].append(article)
 
-class FeedListView(ListView):
-    model = FeedLink
-    template_name = 'pub_list.html'
+    posts = len(context["articles"])
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["publications"] = FeedLink.objects.all()
-        return context
+    context["articles"] = [a[0] for a in itertools.groupby(context["articles"])]
+    return context["articles"][:15]
 
-class PublicationFeedView(ListView):
-    model = Article
-    template_name = 'fetch.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        #context["articles"] = Article.objects.filter(publication_name="DEV Community")[:10]
-        context["articles"] = Article.objects.filter(publication_name=self.kwargs['pub_name'])[:10]
-        return context
+def home(request):
+    return render(request, "base.html")
+
+
+def fetchfeed(request):
+    searchterm = request.POST.get("searchterm")
+    if not searchterm:
+        searchterm = "news"
+    context = {"articles": get_list(searchterm)}
+    request.session["articles"] = context["articles"]
+    request.session["searchterm"] = searchterm
+    return render(
+        request,
+        "fetch.html",
+        {"articles": context["articles"][:15], "searchterm": searchterm},
+    )
+
 
 class AddFeed(CreateView):
     model = FeedLink
     form_class = AddFeedForm
-    success_url = '/'
-
-    def form_valid(self, form):
-        form.instance.rss_link = findfeed(str(form.instance.link))
-        if not form.instance.rss_link:
-            return HttpResponseBadRequest('The RSS feed cannot be found for the publication', status=405)
-        feed = feedparser.parse(form.instance.rss_link)
-        form.instance.name = feed.feed.title
-        return super(AddFeed, self).form_valid(form)
-    
-class DeleteFeed(DeleteView):
-    model = FeedLink
-    #form_class = AddFeedForm
-    success_url = '/'
-     
-    def form_valid(self, form):
-        link_obj = Article.objects.filter(publication_name=self.object.name)
-        link_obj.delete()
-        return super(DeleteFeed, self).form_valid(form)
-
-class EditFeed(UpdateView):
-    model = FeedLink
-    form_class = UpdateFeedForm
-    success_url = '/'
-     
+    success_url = "/"
